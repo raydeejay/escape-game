@@ -175,7 +175,7 @@
              (arrow :left :room01)]
             
             :room06
-            [(defentity "" "images/room06.png" 0 0 700 480)
+            [(hide (defentity "room06-bg" "images/room06.png" 0 0 700 480))
              (arrow :left :room05)
              ]})
 
@@ -198,7 +198,7 @@
     (render! screen [(assoc (texture "images/inventory.png")
                             :x 700 :y 0
                             :width 100 :height 480)])
-    (render! screen entities)
+    (render! screen (remove #(:hidden %) entities))
     (render! screen (:inventory screen))
     (if (:selected screen)
       (render! screen [(assoc (texture "images/inventory-selected.png")
@@ -246,7 +246,7 @@
      (:inventory screen))
     (mapv
      (fn [ent]
-       (cond (and (clicked? ent screen)
+       (cond (and (not (:hidden ent)) (clicked? ent screen)
                   (:action ent))
              (do (debug "ACTIVATING ACTION for" (:name ent))
                  ((:action ent) ent screen entities))
