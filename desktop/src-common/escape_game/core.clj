@@ -60,7 +60,7 @@
   `(defentity
     ({:left "left" :right "right" :up "up" :down "down"} ~direction)
     ({:left "images/arrowLeft.png" :right "images/arrowRight.png" :up "images/arrowUp.png" :down "images/arrowDown.png"} ~direction)
-    ({:left 50 :right 600 :up 318 :down 318} ~direction) ({:left 200 :right 200 :up 391 :down 25} ~direction) 64 64
+    ({:left 50 :right 600 :up 316 :down 316} ~direction) ({:left 200 :right 200 :up 391 :down 25} ~direction) 64 64
     :action (fn
               [ent# screen# entities#]
               (switch-to-room (:current-room screen#) ~target))))
