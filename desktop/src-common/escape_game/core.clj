@@ -190,7 +190,7 @@
             
             :room06
             [(defentity "" "images/room06.png" 0 0 700 480)
-             (arrow :left :room05)]
+             (arrow :left :room05)
              ]})
 
 ;; main screen - where the game is played
