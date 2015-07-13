@@ -185,7 +185,12 @@
                          (if (selected? screen "hammer")
                            (show (some (named "paper") entities))
                            ent)))
-             (arrow :left :room01)]})
+             (arrow :left :room01)]
+            
+            :room06
+            [
+             ]
+            })
 
 ;; main screen - where the game is played
 (defscreen main-screen
@@ -208,6 +213,11 @@
                             :width 100 :height 480)])
     (render! screen entities)
     (render! screen (:inventory screen))
+    (if (:selected screen)
+    (render! screen [(assoc (texture "images/inventory-selected.png")
+                            :x (:x (:selected screen))
+                            :y (- (:y (:selected screen)) 3)
+                            :width 47 :height 58)]))
     entities)       ; WATCH: must return only the entities list! (or NIL?)
 
   :on-resize

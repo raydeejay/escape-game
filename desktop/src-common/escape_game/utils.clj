@@ -26,7 +26,7 @@
            :select nil
            :inventory (map-indexed (fn [index ent]
                                      (assoc ent
-                                            :x (+ 702 (* 48 (mod index 2)))
+                                            :x (+ 702 (* 49 (mod index 2)))
                                             :y (- 424 (* 60 (int (/ index 2))))))
                                    inv)))
 
