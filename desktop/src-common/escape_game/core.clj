@@ -65,6 +65,15 @@
               [ent# screen# entities#]
               (switch-to-room (:current-room screen#) ~target))))
 
+;; these macros capture the symbols ent, screen and entities so they
+;; can be used in the body
+(defmacro when-selected
+  [item & body]
+  `(fn ~['ent 'screen 'entities]
+     (if (selected? ~'screen ~item)
+       (do ~@body)
+       ~'ent)))
+
 
 ;; small macro to make code more terse
 ;; may want to update the :image entry in the map, too?
