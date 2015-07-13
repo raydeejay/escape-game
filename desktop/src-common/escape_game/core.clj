@@ -57,19 +57,14 @@
 
 ;; a simple macro to make arrow definitions more concise
 (defmacro arrow [direction target]
-  (let [name (direction {:left "left"
-                         :right "right"})
-        filename (direction {:left "images/arrowLeft.png"
-                             :right "images/arrowRight.png"})
-        x (direction {:left 50
-                      :right 600})]
-    `{:image ~filename
-              :name ~name
-              :x ~x :y 200
-              :width 64 :height 64
-              :action (fn
-                        [ent# screen# entities#]
-                        (switch-to-room (:current-room screen#) ~target))}))
+  `(defentity
+    ({:left "left" :right "right"} ~direction)
+    ({:left "images/arrowLeft.png" :right "images/arrowRight.png"} ~direction)
+    ({:left 50 :right 600} ~direction) 200 64 64
+    :action (fn
+              [ent# screen# entities#]
+              (switch-to-room (:current-room screen#) ~target))))
+
 
 ;; small macro to make code more terse
 ;; may want to update the :image entry in the map, too?
