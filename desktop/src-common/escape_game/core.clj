@@ -168,9 +168,10 @@
                                      (assoc ent
                                             :action (fn [ent screen entities]
                                                       (if (selected? screen "lighter")
-                                                        [(dissoc ent :action) (show (some (named "ladder") entities))]
+                                                        [(dissoc ent :action) (show (some (named "ladder") entities)) (show (some (named "smoke-in-bucket") entities))]
                                                         ent))))
                                  [ent]))))
+             (hide (defentity "smoke-in-bucket" "images/smoke.png" 470 181 48 48))
              (defentity "table" "images/table.png" 360 5 320 200
                :action (fn [ent screen entities]
                          (if (selected? screen "bucket")
@@ -179,7 +180,7 @@
                            ent)))
              (hide (defentity "ladder" "images/ladder.png" 160 30 60 770
                      :action (fn [ent screen entities]
-                               (set-screen! escape-game-game win-screen))))
+                               (switch-to-room (:current-room screen) :room06))))
              (defentity "vase" "images/vase.png" 120 30 50 63
                :action (fn [ent screen entities]
                          (if (selected? screen "hammer")
@@ -188,9 +189,9 @@
              (arrow :left :room01)]
             
             :room06
-            [
-             ]
-            })
+            [(defentity "" "images/room06.png" 0 0 700 480)
+             (arrow :left :room05)]
+             ]})
 
 ;; main screen - where the game is played
 (defscreen main-screen
@@ -214,10 +215,10 @@
     (render! screen entities)
     (render! screen (:inventory screen))
     (if (:selected screen)
-    (render! screen [(assoc (texture "images/inventory-selected.png")
-                            :x (:x (:selected screen))
-                            :y (- (:y (:selected screen)) 3)
-                            :width 47 :height 58)]))
+      (render! screen [(assoc (texture "images/inventory-selected.png")
+                              :x (:x (:selected screen))
+                              :y (- (:y (:selected screen)) 3)
+                              :width 47 :height 58)]))
     entities)       ; WATCH: must return only the entities list! (or NIL?)
 
   :on-resize
