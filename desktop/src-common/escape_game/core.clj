@@ -58,9 +58,9 @@
 ;; a simple macro to make arrow definitions more concise
 (defmacro arrow [direction target]
   `(defentity
-    ({:left "left" :right "right"} ~direction)
-    ({:left "images/arrowLeft.png" :right "images/arrowRight.png"} ~direction)
-    ({:left 50 :right 600} ~direction) 200 64 64
+    ({:left "left" :right "right" :up "up" :down "down"} ~direction)
+    ({:left "images/arrowLeft.png" :right "images/arrowRight.png" :up "images/arrowUp.png" :down "images/arrowDown.png"} ~direction)
+    ({:left 50 :right 600 :up 318 :down 318} ~direction) ({:left 200 :right 200 :up 391 :down 25} ~direction) 64 64
     :action (fn
               [ent# screen# entities#]
               (switch-to-room (:current-room screen#) ~target))))
@@ -176,6 +176,8 @@
             
             :room06
             [(hide (defentity "room06-bg" "images/room06.png" 0 0 700 480))
+             (hide (defentity "room06-bg-lamplit" "images/room06-lamplit.png" 0 0 700 480))
+             
              (arrow :left :room05)
              ]})
 

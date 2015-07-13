@@ -40,13 +40,11 @@
 
 (defn hide
   [ent]
-  (assoc ent :x (- (:x ent) 1000))
-  (assoc ent :y (- (:y ent) 1000)))
+  (assoc ent :hidden "bacon"))
 
 (defn show
   [ent]
-  (assoc ent :x (+ (:x ent) 1000))
-  (assoc ent :y (+ (:y ent) 1000)))
+  (dissoc ent :hidden))
 
 (defn pickup
   "I move an item from the screen to the inventory. and return nil so
