@@ -87,14 +87,10 @@
              (defentity "box" "images/box.png" 50 50 48 48
                :action (pickup-action-fn))
              (defentity "door" "images/door2.png" 250 81 128 256
-               :action (fn [ent screen entities]
-                         (cond (:open ent)
-                               (switch-to-room (:current-room screen) :room05)
-                               :else
-                               (if (selected? screen "key")
-                                 (do (change-texture ent "images/door2open.png")
-                                   (assoc ent :open true))
-                                 [ent]))))
+               :action (when-selected "key"
+                                      (change-texture ent "images/door2open.png")
+                                      (assoc ent :action (fn [ent screen entities]
+                                                           (switch-to-room (:current-room screen) :room05)))))
              (arrow :right :room02)]
 
             :room02
@@ -102,11 +98,9 @@
              (hide (defentity "key" "images/key.png" 170 40 50 63
                      :action (pickup-action-fn)))
              (defentity "portrait" "images/portrait.png" 150 220 96 158
-               :action (fn [ent screen entities]
-                               (if (selected? screen "knife")
-                                 [(show (some (named "broken-portrait") entities))
-                                  (show (some (named "key") entities))]
-                                 [ent])))
+               :action (when-selected "knife"
+                                      [(show (some (named "broken-portrait") entities))
+                                       (show (some (named "key") entities))]))
              (hide (defentity "broken-portrait" "images/broken-portrait.png" 150 220 96 158))
              (hide (defentity "hammer" "images/hammer.png" 460 20 80 80
                      :action (pickup-action-fn)))
@@ -125,23 +119,18 @@
              (hide (defentity "knife" "images/knife.png" 380 80 64 64
                      :action (pickup-action-fn)))
              (hide (defentity "fire" "images/fire.png" 380 80 64 64
-                     :action (fn [ent screen entities]
-                               (if (selected? screen "box")
-                                 (do (consume "box" screen)
-                                     (show (some (named "knife") entities)))
-                                 [ent]))))
+                     :action (when-selected "box"
+                                            (consume "box" screen)
+                                            (show (some (named "knife") entities)))))
              (hide (defentity "fireplace-logs" "images/logs.png" 380 80 61 61
-                     :action (fn [ent screen entities]
-                               (if (selected? screen "lighter")
-                                 (show (some (named "fire") entities))
-                                 [ent]))))
+                     :action (when-selected "lighter"
+                                            (show (some (named "fire") entities)))))
              (defentity "fireplace" "images/fireplace.png" 250 81 303 253
-               :action (fn [ent screen entities]
-                         (if (selected? screen "logs")
-                           (do (debug "PREPARING FIREPLACE")
-                               (consume "logs" screen)
-                               [(dissoc ent :action) (show (some (named "fireplace-logs") entities))])
-                           [ent])))
+               :action (when-selected "logs"
+                                      (debug "PREPARING FIREPLACE")
+                                      (consume "logs" screen)
+                                      [(dissoc ent :action)
+                                       (show (some (named "fireplace-logs") entities))]))
              (defentity "lighter" "images/lighter.png" 278 214 61 61
                :action (pickup-action-fn))
              (arrow :left :room02)
@@ -154,11 +143,9 @@
              (defentity "bucket" "images/bucket.png" 70 40 48 48
                       :action (pickup-action-fn))
              (defentity "tree" "images/tree.png" 450 30 240 336
-               :action (fn [ent screen entities]
-                         (if (selected? screen "axe")
-                           (do (debug "CUTTING TREE!")
-                               (show (some (named "logs") entities)))
-                           [ent])))
+               :action (when-selected "axe"
+                                      (debug "CUTTING TREE!")
+                                      (show (some (named "logs") entities))))
              (arrow :left :room03)]
 
             :room05
@@ -166,30 +153,25 @@
              (hide (defentity "paper" "images/paper.png" 120 20 50 63
                      :action (pickup-action-fn)))
              (hide (defentity "bucket-in-table" "images/bucket.png" 470 130 50 63
-                     :action (fn [ent screen entities]
-                               (if (selected? screen "paper")
-                                 (do (consume "paper" screen)
-                                     (assoc ent
-                                            :action (fn [ent screen entities]
-                                                      (if (selected? screen "lighter")
-                                                        [(dissoc ent :action) (show (some (named "ladder") entities)) (show (some (named "smoke-in-bucket") entities))]
-                                                        ent))))
-                                 [ent]))))
+                     :action (when-selected "paper"
+                                            (consume "paper" screen)
+                                            (assoc ent
+                                                   :action (when-selected "lighter"
+                                                                          [(dissoc ent :action)
+                                                                           (show (some (named "ladder") entities))
+                                                                           (show (some (named "smoke-in-bucket") entities))])))))
              (hide (defentity "smoke-in-bucket" "images/smoke.png" 470 181 48 48))
              (defentity "table" "images/table.png" 360 5 320 200
-               :action (fn [ent screen entities]
-                         (if (selected? screen "bucket")
-                           (do (consume "bucket" screen)
-                               [(dissoc ent :action) (show (some (named "bucket-in-table") entities))])
-                           ent)))
+               :action (when-selected "bucket"
+                                      (consume "bucket" screen)
+                                      [(dissoc ent :action)
+                                       (show (some (named "bucket-in-table") entities))]))
              (hide (defentity "ladder" "images/ladder.png" 160 30 60 770
                      :action (fn [ent screen entities]
                                (switch-to-room (:current-room screen) :room06))))
              (defentity "vase" "images/vase.png" 120 30 50 63
-               :action (fn [ent screen entities]
-                         (if (selected? screen "hammer")
-                           (show (some (named "paper") entities))
-                           ent)))
+               :action (when-selected "hammer"
+                                      (show (some (named "paper") entities))))
              (arrow :left :room01)]
             
             :room06
