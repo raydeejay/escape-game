@@ -55,7 +55,7 @@
                :action (when-selected "key"
                                       (change-texture ent "images/door3open.png")
                                       (assoc ent :action (fn [ent screen entities]
-                                                           (switch-to-room (:current-room screen) :room01 screen))))) ;; TODO: switch to stairs
+                                                           (switch-to-room (:current-room screen) :room05 screen))))) ;; TODO: switch to stairs
              (arrow :right :room02)]
 
             :room02

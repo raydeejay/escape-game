@@ -24,13 +24,14 @@
 
 (defn update-inventory-coords
   [screen inv]
-  (update! screen
-           :select nil
-           :inventory (map-indexed (fn [index ent]
-                                     (assoc ent
-                                            :x (+ 702 (* 49 (mod index 2)))
-                                            :y (- 424 (* 60 (int (/ index 2))))))
-                                   inv)))
+  (let [newinv (map-indexed (fn [index ent]
+                              (assoc ent
+                                      :x (+ 702 (* 49 (mod index 2)))
+                                      :y (- 424 (* 60 (int (/ index 2))))))
+                            inv)]
+    (update! screen
+             :selected (first (filter #(= (:name (:selected screen)) (:name %)) newinv))
+             :inventory newinv)))
 
 (def debug? true) ;; umm................
 (defn debug
@@ -92,4 +93,6 @@
 
 (defn consume
   [name screen]
+  (if (some #(= (:selected screen) %) (filter (named name) (:inventory screen)))
+    (update! screen :selected nil))
   (update-inventory-coords screen (remove (named name) (:inventory screen))))
