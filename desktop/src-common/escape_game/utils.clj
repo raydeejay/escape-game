@@ -1,5 +1,6 @@
 (ns escape-game.utils
-  (:require [play-clj.core :refer :all]))
+  (:require [play-clj.core :refer :all]
+            [play-clj.g2d :refer :all]))
 
 (defn move
   [entity direction]
@@ -29,6 +30,34 @@
                                             :x (+ 702 (* 49 (mod index 2)))
                                             :y (- 424 (* 60 (int (/ index 2))))))
                                    inv)))
+
+(def debug? true) ;; umm................
+(defn debug
+  "I print debugging information if I should."
+  [& r]
+  (when debug? (apply println r)))
+
+
+(defn switch-to-room
+  [room target screen]
+  (debug "MOVING FROM" room "TO" target)
+  (screen! screen :switch-to-room :target target)
+  nil)
+
+(defn map->entity
+  "I take a map and return an entity merged with the map."
+  [m]
+  (merge (texture (:image m)) m))
+
+(defn room->entities
+  "I make a vector? of entities from an entry in the rooms map."
+  [r rooms]
+  (debug "CREATING ROOM FOR" r "...")
+  (let [room (get rooms r)]
+    (map #(do (debug "LOADING THINGIE" (:name %) "WITH VAL" %)
+              (map->entity %))
+         room)))
+
 
 (defn selected?
   [screen name]
@@ -67,4 +96,3 @@
 (defn consume
   [name screen]
   (update-inventory-coords screen (remove (named name) (:inventory screen))))
-
