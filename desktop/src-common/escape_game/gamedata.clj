@@ -55,9 +55,8 @@
                :action (when-selected "key"
                                       (change-texture ent "images/door3open.png")
                                       (assoc ent :action (fn [ent screen entities]
-                                                           (switch-to-room (:current-room screen) :room05 screen))))) ;; TODO: correct room here
-             (arrow :right :room02)
-             (arrow :down :room06)] ;; DEBUG ARROW
+                                                           (switch-to-room (:current-room screen) :room01 screen))))) ;; TODO: switch to stairs
+             (arrow :right :room02)]
 
             :room02
             [(defentity "" "images/room02.png" 0 0 700 480)
@@ -142,8 +141,8 @@
 
             :room06
             [(hide (defentity "room06-bg" "images/room06.png" 0 0 700 480))
-             (show (defentity "room06-bg-lamplit" "images/room06-lamplit.png" 0 0 700 480))
-             (show (defentity "lantern-on-floor" "images/lantern.png" 145 60 48 48))
+             (hide (defentity "room06-bg-lamplit" "images/room06-lamplit.png" 0 0 700 480))
+             (hide (defentity "lantern-on-floor" "images/lantern.png" 145 60 48 48))
 
              (arrow :down :room05)
              ]})

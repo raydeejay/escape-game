@@ -1,5 +1,6 @@
 (ns escape-game.utils
-  (:require [play-clj.core :refer :all]
+  (:require [escape-game.actions :refer :all]
+            [play-clj.core :refer :all]
             [play-clj.g2d :refer :all]))
 
 (defn move
@@ -85,11 +86,7 @@
         n (count inv)
         new (assoc ent
                    :width 48 :height 48
-                   :action (fn [ent_ screen_ entities_]
-                             (println "SELECTING" (:name ent_))
-                             (let [new_ (assoc ent_ :selected (not (:selected ent_)))]
-                               (update! screen :selected new_)
-                               new_)))]
+                   :action (toggle-selected-fn))]
     (update-inventory-coords screen (concat (:inventory screen) [new])))
   nil)
 
