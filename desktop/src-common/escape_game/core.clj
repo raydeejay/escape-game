@@ -84,14 +84,20 @@
 ;; the game data
 (def rooms {:room01
             [(defentity "" "images/room01.png" 0 0 700 480)
-             (defentity "box" "images/box.png" 50 50 48 48
+             (defentity "box" "images/box.png" 80 50 48 48
                :action (pickup-action-fn))
              (defentity "door" "images/door2.png" 250 81 128 256
                :action (when-selected "key"
                                       (change-texture ent "images/door2open.png")
                                       (assoc ent :action (fn [ent screen entities]
                                                            (switch-to-room (:current-room screen) :room05)))))
-             (arrow :right :room02)]
+             (defentity "door" "images/door3.png" 12 16 35 256
+               :action (when-selected "key"
+                                      (change-texture ent "images/door3open.png")
+                                      (assoc ent :action (fn [ent screen entities]
+                                                           (switch-to-room (:current-room screen) :room05))))) ;; TODO: correct room here
+             (arrow :right :room02)
+             (arrow :down :room06)] ;; DEBUG ARROW
 
             :room02
             [(defentity "" "images/room02.png" 0 0 700 480)
@@ -176,9 +182,10 @@
             
             :room06
             [(hide (defentity "room06-bg" "images/room06.png" 0 0 700 480))
-             (hide (defentity "room06-bg-lamplit" "images/room06-lamplit.png" 0 0 700 480))
+             (show (defentity "room06-bg-lamplit" "images/room06-lamplit.png" 0 0 700 480))
+             (show (defentity "lantern-on-floor" "images/lantern.png" 145 60 48 48))
              
-             (arrow :left :room05)
+             (arrow :down :room05)
              ]})
 
 ;; main screen - where the game is played
