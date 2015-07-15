@@ -63,14 +63,18 @@
                 (asset-manager! manager :get-asset-names))
             (let [newinv (map #(change-texture % (:image %)) (:inventory screen))]
               (update! screen :inventory newinv))
-            (:switch-to-room (:current-room screen))
-            (let [newrooms (zipmap
-                             (keys (:rooms screen))
-                             (map (fn [vec]
-                                    (map #(change-texture % (:image %)) vec))
-                                  (vals (:rooms screen))))]
-              (update! screen :rooms newrooms)
-              ((:current-room screen) newrooms)))
+            (let [mergerooms (merge (:rooms screen) {(:current-room screen) entities})]
+              (let [newrooms (zipmap
+                               (keys mergerooms)
+                               (map (fn [vec]
+                                      (map (fn [ent]
+                                             (let [img (:image ent)]
+                                               (change-texture ent "images/transparent.png") ;; Texture won't reload unless we actually change the value
+                                               (change-texture ent img)))
+                                           vec))
+                                    (vals mergerooms)))]
+                (update! screen :rooms newrooms)
+              ((:current-room screen) newrooms))))
           ;; (= (:key screen) (key-code :s))
           ;; (do (input! :get-text-input #(debug %) "Spawn item" "text" "hint")
           ;;     nil)
@@ -112,8 +116,8 @@
                         (room->entities target rooms))]
       (update! screen
                :rooms (merge (screen :rooms)
-                             {from entities}
-                             {target newroom})
+                             {target newroom}
+                             {from entities})
                :current-room target)
       newroom)))
 
