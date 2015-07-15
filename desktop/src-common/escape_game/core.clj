@@ -40,7 +40,7 @@
                               :x (:x (:selected screen))
                               :y (- (:y (:selected screen)) 3)
                               :width 47 :height 58)]))
-    entities)       ; WATCH: must return only the entities list! (or NIL?)
+    entities)       ; WATCH: must return onuly the entities list! (or NIL?)
 
   :on-resize
   (fn [screen entities]
@@ -56,6 +56,21 @@
               nil)
           (= (:key screen) (key-code :r))
           (do (room->entities (:current-room screen) rooms))
+          (= (:key screen) (key-code :y))
+          (do (mapv (fn [name]
+                  (debug "RELOADING" name)
+                  (asset-manager! manager :unload name))
+                (asset-manager! manager :get-asset-names))
+            (let [newinv (map #(change-texture % (:image %)) (:inventory screen))]
+              (update! screen :inventory newinv))
+            (:switch-to-room (:current-room screen))
+            (let [newrooms (zipmap
+                             (keys (:rooms screen))
+                             (map (fn [vec]
+                                    (map #(change-texture % (:image %)) vec))
+                                  (vals (:rooms screen))))]
+              (update! screen :rooms newrooms)
+              ((:current-room screen) newrooms)))
           ;; (= (:key screen) (key-code :s))
           ;; (do (input! :get-text-input #(debug %) "Spawn item" "text" "hint")
           ;;     nil)
