@@ -35,10 +35,8 @@
        ~'ent)))
 
 
-;; small macro to make code more terse
-;; may want to update the :image entry in the map, too?
-(defmacro change-texture [who filename]
-  `(texture! ~who :set-texture (texture! (texture ~filename) :get-texture)))
+(defn change-texture [who filename]
+  (-> who (dissoc :object) (assoc :image filename) (map->entity)))
 
 
 ;; the game data
@@ -48,14 +46,14 @@
                :action (pickup-action-fn))
              (defentity "door" "images/door2.png" 250 81 128 256
                :action (when-selected "key"
-                                      (change-texture ent "images/door2open.png")
-                                      (assoc ent :action (fn [ent screen entities]
-                                                           (switch-to-room (:current-room screen) :room05 screen)))))
+                                      (assoc (change-texture ent "images/door2open.png")
+                                             :action (fn [ent screen entities]
+                                                       (switch-to-room (:current-room screen) :room05 screen)))))
              (defentity "door" "images/door3.png" 12 16 35 256
                :action (when-selected "key"
-                                      (change-texture ent "images/door3open.png")
-                                      (assoc ent :action (fn [ent screen entities]
-                                                           (switch-to-room (:current-room screen) :room05 screen))))) ;; TODO: switch to stairs
+                                      (assoc (change-texture ent "images/door3open.png")
+                                             :action (fn [ent screen entities]
+                                                       (switch-to-room (:current-room screen) :room05 screen))))) ;; TODO: switch to stairs
              (arrow :right :room02)]
 
             :room02
