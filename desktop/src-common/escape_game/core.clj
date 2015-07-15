@@ -40,7 +40,7 @@
                               :x (:x (:selected screen))
                               :y (- (:y (:selected screen)) 3)
                               :width 47 :height 58)]))
-    entities)       ; WATCH: must return onuly the entities list! (or NIL?)
+    entities)       ; WATCH: must return only the entities list! (or NIL?)
 
   :on-resize
   (fn [screen entities]
